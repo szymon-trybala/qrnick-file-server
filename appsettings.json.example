@@ -1,0 +1,12 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  // Ściezka do folderu z plikami gier, np. C:\qrnick-file-server-unity-files
+  "UnityFilesPath": "C:\qrnick-file-server-unity-files" 
+}
