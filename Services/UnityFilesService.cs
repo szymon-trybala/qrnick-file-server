@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Qrnick.FileServer.Extensions;
 using Qrnick.FileServer.Models;
 
@@ -21,26 +21,19 @@ namespace Qrnick.FileServer.Services
             this._unityFilesDir = unityFilesDir;
         }
 
-        public List<FileDto> GetAvailableFiles()
+        public List<GameMetadata> GetAvailableGames()
         {
-            var list = new List<FileDto>();
-            foreach (var file in _unityFilesDir.GetFiles())
-            {
-                list.Add(new FileDto()
-                {
-                    Name = file.Name,
-                    CreatedAt = file.CreationTimeUtc,
-                    Size = file.Length
-                });
-            }
-            return list;
+            var gamesDictionary = _unityFilesDir.GetFiles().First(x => x.Name == "gamesDictionary.json");
+            var jsonText = File.ReadAllText(gamesDictionary.FullName);
+            var metadata = JsonSerializer.Deserialize<GameMetadata[]>(jsonText);
+            return metadata.ToList();
         }
 
         public PhysicalFileResult GetDataFile(string gameId)
         {
             var dataFileName = $"{gameId}.data.gz";
             var matchingFile = _unityFilesDir.GetFiles().First(x => x.Name == dataFileName);
-            return new PhysicalFileResult(matchingFile.FullName, "application/gzip");
+            return new PhysicalFileResult(matchingFile.FullName, "application/octet-stream");
         }
 
         public PhysicalFileResult GetFrameworkFile(string gameId)

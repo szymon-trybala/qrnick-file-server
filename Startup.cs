@@ -26,7 +26,7 @@ namespace Qrnick.FileServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -37,6 +37,12 @@ namespace Qrnick.FileServer
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(builder => builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithOrigins("http://localhost:3000")
+                );
+                
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

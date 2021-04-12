@@ -7,7 +7,7 @@ using Qrnick.FileServer.Services;
 namespace Qrnick.FileServer.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("game")]
     public class FilesController : ControllerBase
     {
         private readonly IUnityFilesService _unityFilesService;
@@ -16,65 +16,36 @@ namespace Qrnick.FileServer.Controllers
             _unityFilesService = unityFilesService;
         }
 
-        [HttpGet("FilesList")]
-        public List<FileDto> GetAvailableFiles()
+        [HttpGet("List")]
+        public List<GameMetadata> GetAvailableGames()
         {
-            return _unityFilesService.GetAvailableFiles();
+            return _unityFilesService.GetAvailableGames();
         }
 
-        [HttpGet("Data")]
+        [HttpGet("UnityDataFile")]
         public FileResult GetDataFile(string gameId)
         {
-            var contentDisposition = new ContentDisposition
-            {
-                FileName = $"{gameId}.data.gz",
-                Inline = false,
-            };
-            this.HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
-            this.HttpContext.Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
+            this.HttpContext.Response.Headers.Add("Content-Type", "application/octet-stream");
             return _unityFilesService.GetDataFile(gameId);
         }
 
-        [HttpGet("Framework")]
+        [HttpGet("UnityFrameworkFile")]
         public FileResult GetFrameworkFile(string gameId)
         {
-            var contentDisposition = new ContentDisposition
-            {
-                FileName = $"{gameId}.framework.js.gz",
-                Inline = false,
-            };
-            this.HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
-            this.HttpContext.Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
+            this.HttpContext.Response.Headers.Add("Content-Type", "application/javascript");
             return _unityFilesService.GetFrameworkFile(gameId);
         }
 
-        [HttpGet("Loader")]
+        [HttpGet("UnityLoaderFile")]
         public FileResult GetLoaderFile(string gameId)
         {
-            var contentDisposition = new ContentDisposition
-            {
-                FileName = $"{gameId}.loader.js",
-                Inline = false,
-            };
-            this.HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
-            this.HttpContext.Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
             return _unityFilesService.GetLoaderFile(gameId);
         }
 
-        [HttpGet("wasm")]
+        [HttpGet("UnityWasmFile")]
         public FileResult GetWasmFile(string gameId)
         {
-            var contentDisposition = new ContentDisposition
-            {
-                FileName = $"{gameId}.wasm.gz",
-                Inline = false,
-            };
-            this.HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
-            this.HttpContext.Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-
+            this.HttpContext.Response.Headers.Add("Content-Type", "application/wasm");
             return _unityFilesService.GetWasmFile(gameId);
         }
     }

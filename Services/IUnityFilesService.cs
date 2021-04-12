@@ -10,6 +10,6 @@ namespace Qrnick.FileServer.Services
         PhysicalFileResult GetFrameworkFile(string gameId);
         PhysicalFileResult GetLoaderFile(string gameId);
         PhysicalFileResult GetWasmFile(string gameId);
-        List<FileDto> GetAvailableFiles();
+        List<GameMetadata> GetAvailableGames();
     }
 }
