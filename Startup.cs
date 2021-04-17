@@ -33,6 +33,8 @@ namespace Qrnick.FileServer
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Qrnick.FileServer", Version = "v1" });
             });
             services.AddTransient<IUnityFilesService, UnityFilesService>();
+            services.AddSingleton<GamesMetadataStorage>();
+            services.AddHostedService<GamesMetadataHostedService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,7 +44,7 @@ namespace Qrnick.FileServer
                 .AllowAnyHeader()
                 .WithOrigins("http://localhost:3000")
                 );
-                
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

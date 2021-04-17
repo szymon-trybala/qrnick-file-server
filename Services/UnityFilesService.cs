@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,25 +22,21 @@ namespace Qrnick.FileServer.Services
             this._unityFilesDir = unityFilesDir;
         }
 
-        public List<GameMetadata> GetAvailableGames()
-        {
-            var gamesDictionary = _unityFilesDir.GetFiles().First(x => x.Name == "gamesDictionary.json");
-            var jsonText = File.ReadAllText(gamesDictionary.FullName);
-            var metadata = JsonSerializer.Deserialize<GameMetadata[]>(jsonText);
-            return metadata.ToList();
-        }
-
         public PhysicalFileResult GetDataFile(string gameId)
         {
             var dataFileName = $"{gameId}.data.gz";
-            var matchingFile = _unityFilesDir.GetFiles().First(x => x.Name == dataFileName);
+            var matchingFile = _unityFilesDir.GetFiles().FirstOrDefault(x => x.Name == dataFileName);
+            if (matchingFile == null)
+                throw new Exception($"Couldn't find data file for game with id {gameId}");
             return new PhysicalFileResult(matchingFile.FullName, "application/octet-stream");
         }
 
         public PhysicalFileResult GetFrameworkFile(string gameId)
         {
             var frameworkFileName = $"{gameId}.framework.js.gz";
-            var matchingFile = _unityFilesDir.GetFiles().First(x => x.Name == frameworkFileName);
+            var matchingFile = _unityFilesDir.GetFiles().FirstOrDefault(x => x.Name == frameworkFileName);
+            if (matchingFile == null)
+                throw new Exception($"Couldn't find framework file for game with id {gameId}");
             return new PhysicalFileResult(matchingFile.FullName, "application/javascript");
 
         }
@@ -47,14 +44,18 @@ namespace Qrnick.FileServer.Services
         public PhysicalFileResult GetLoaderFile(string gameId)
         {
             var loaderFileName = $"{gameId}.loader.js";
-            var matchingFile = _unityFilesDir.GetFiles().First(x => x.Name == loaderFileName);
+            var matchingFile = _unityFilesDir.GetFiles().FirstOrDefault(x => x.Name == loaderFileName);
+            if (matchingFile == null)
+                throw new Exception($"Couldn't find loader file for game with id {gameId}");
             return new PhysicalFileResult(matchingFile.FullName, "application/javascript");
         }
 
         public PhysicalFileResult GetWasmFile(string gameId)
         {
             var wasmFileName = $"{gameId}.wasm.gz";
-            var matchingFile = _unityFilesDir.GetFiles().First(x => x.Name == wasmFileName);
+            var matchingFile = _unityFilesDir.GetFiles().FirstOrDefault(x => x.Name == wasmFileName);
+            if (matchingFile == null)
+                throw new Exception($"Couldn't find wasm file for game with id {gameId}");
             return new PhysicalFileResult(matchingFile.FullName, "application/wasm");
         }
     }
