@@ -42,7 +42,7 @@ namespace Qrnick.FileServer
             app.UseCors(builder => builder
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .WithOrigins("http://localhost:3000")
+                .AllowAnyOrigin()
                 );
 
             if (env.IsDevelopment())

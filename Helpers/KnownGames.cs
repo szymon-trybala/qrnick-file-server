@@ -8,7 +8,7 @@ namespace Qrnick.FileServer.Helpers
         {
             var dictionary = new Dictionary<string, (string, string)>();
             dictionary.Add("dino", ("Dino", "Nie tylko do gry offline"));
-            dictionary.Add("tic_tac_toe", ("Kółko i krzyzyk", "Zrelaksuj się przy klasyce"));
+            dictionary.Add("tic_tac_toe", ("Kółko i krzyżyk", "Zrelaksuj się przy klasyce"));
             return dictionary;
         }
     }
